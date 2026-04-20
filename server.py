@@ -1,28 +1,34 @@
-import os
 import time
-from fastapi import FastAPI
-from pydantic import BaseModel
 from google import genai
 from google.genai import types
 from google.genai.errors import ServerError
 
-app = FastAPI()
-
-client = genai.Client(
-    api_key=os.getenv("")
-)
+client = genai.Client(api_key=AQ.Ab8RN6IZHeVOK3v8swOHxHmgfN-6wSIJdN3x-o56-P_ecxR79w")
 
 chat = client.chats.create(
-    model="gemini-2.5-flash",
-    config=types.GenerateContentConfig(
-        system_instruction="You are a helpful study chatbot."
-    )
+ model="gemini-2.5-flash",
+ config=types.GenerateContentConfig(
+ system_instruction="You are a helpful chatbot."
+ )
 )
 
-class ChatRequest(BaseModel):
-    message: str
+print("Chatbot ready. Type 'exit' to quit.\n")
 
-@app.post("/chat")
+while True:
+ user_input = input("You: ")
+ if user_input.lower() == "exit":
+ break
+
+ for attempt in range(5):
+ try:
+ response = chat.send_message(user_input)
+ print("Bot:", response.text)
+ break
+ except ServerError as e:
+ if attempt == 4:
+ print("Bot: I'm busy right now. Try again in a moment.")
+ else:
+ time.sleep(2 ** attempt)
 def chat_with_gemini(req: ChatRequest):
     for attempt in range(5):
         try:
