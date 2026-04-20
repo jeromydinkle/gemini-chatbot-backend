@@ -3,7 +3,7 @@ from google import genai
 from google.genai import types
 from google.genai.errors import ServerError
 
-client = genai.Client(api_key=AQ.Ab8RN6IZHeVOK3v8swOHxHmgfN-6wSIJdN3x-o56-P_ecxR79w")
+client = genai.Client(api_key=AQ.")
 
 chat = client.chats.create(
  model="gemini-2.5-flash",
