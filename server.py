@@ -9,7 +9,7 @@ from google.genai.errors import ServerError
 app = FastAPI()
 
 client = genai.Client(
-    api_key=os.getenv("AQ.Ab8RN6IZHeVOK3v8swOHxHmgfN-6wSIJdN3x-o56-P_ecxR79w")
+    api_key=os.getenv("")
 )
 
 chat = client.chats.create(
