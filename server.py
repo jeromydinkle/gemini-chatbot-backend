@@ -1,26 +1,31 @@
 import os
 import time
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+ fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from google import genai
 from google.genai import types
 from google.genai.errors import ServerError
 
-# ---------- FastAPI app ----------
+# ---------------- FastAPI app ----------------
 app = FastAPI()
 
-# ---------- CORS (REQUIRED for Expo) ----------
+# ---------------- CORS (required for Expo) ----------------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # okay for development
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ---------- Gemini client ----------
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+# ---------------- Gemini client ----------------
+api_key = os.getenv("GEMINI_API_KEY")
+
+if not api_key:
+    raise RuntimeError("GEMINI_API_KEY environment variable is NOT set")
+
+client = genai.Client(api_key=api_key)
 
 chat = client.chats.create(
     model="gemini-2.5-flash",
@@ -29,11 +34,11 @@ chat = client.chats.create(
     )
 )
 
-# ---------- Request model ----------
+# ---------------- Request schema ----------------
 class ChatRequest(BaseModel):
     message: str
 
-# ---------- Endpoint ----------
+# ---------------- Endpoint ----------------
 @app.post("/chat")
 async def chat_with_gemini(req: ChatRequest):
     print("Received:", req.message)
